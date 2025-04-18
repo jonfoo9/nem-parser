@@ -1,0 +1,84 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id "com.diffplug.spotless" version "7.0.0"
+	id 'io.freefair.lombok' version '8.13.1'
+	id 'jacoco'
+	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
+}
+
+group = 'com.floenergy'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	implementation 'com.google.inject:guice:5.1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
+	testCompileOnly 'org.projectlombok:lombok:1.18.30'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	testImplementation platform("org.junit:junit-bom:5.11.0")
+	testImplementation "org.junit.jupiter:junit-jupiter"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+
+	testImplementation 'org.mockito:mockito-core:5.6.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:4.8.1'
+	testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+	jacoco {
+		// Required for @SpringBootTest to register coverage
+		includeNoLocationClasses = true
+		excludes = ['jdk.internal.*']
+	}
+}
+
+spotless {
+	java {
+		target 'src/**/*.java'
+		googleJavaFormat()
+	}
+}
+
+
+jacocoTestReport {
+	dependsOn test // Make sure the report task runs after the tests
+
+	reports {
+		html {
+			// Specify the output directory for the HTML report
+			destination = file("${buildDir}/reports/jacoco/test/html")
+		}
+		xml {
+			// Specify the output file for the XML report
+			destination = file("${buildDir}/reports/jacoco/test/xml")
+		}
+	}
+}
+
+
+
+apply plugin: 'java'
+apply plugin: 'com.diffplug.spotless'
