@@ -102,6 +102,7 @@ When processing `NEM12` files, the service might encounter errors like:
 - Empty Lines: Blank lines within the NEM12 file are ignored.
 - 300 Record Before 200: If a 300 data record appears before its corresponding 200 NMI record, an error is logged, and that specific 300 record is skipped. The parser continues processing subsequent lines.
 - Invalid/Empty Consumption Values: Within a 300 record, if individual interval readings are empty or contain non-numeric characters, those specific readings are skipped.
+- Invalid file formats or empty files cause the endpoint to return a 4xx client error
 
 # Further Improvements
 
@@ -113,7 +114,7 @@ since we have to synchronise all threads to the NMI number for the first 200 row
 Add ability to directly integrate with SQL DBs 
 
 ## Input Validation
-More robust validation of NEM12 format rules beyond just checking record types of 200/300.
+More robust validation of NEM12 format rules beyond just checking record types of 200/300, file formats, if the file is empty. We can write more robust validation classes with NEM12 specific validation. 
 
 ## Configuration
 Add ability for external configuration to change behaviour of application when the 2 above features have been added
