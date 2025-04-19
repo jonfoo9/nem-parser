@@ -107,7 +107,7 @@ When processing `NEM12` files, the service might encounter errors like:
 # Further Improvements
 
 ## Multithreading
-For processes files even faster, we can use multiple threads to read batches of 300 lines at once. However this might be complex 
+For processing files even faster, we can use multiple threads to read batches of 300 lines at once. However this might be complex 
 since we have to synchronise all threads to the NMI number for the first 200 row
 
 ## Direct Database Integration
