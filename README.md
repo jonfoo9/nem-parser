@@ -1,5 +1,7 @@
 # NEM12 Parser
 
+(This is a technical task for the Flo Energy Group complete by Jonathan Foo)
+
 This is a Java Spring Boot microservice designed to process `NEM12` files, which are used to transmit electricity meter data in the energy market. 
 
 This service parses `NEM12` files and generates SQL insert statements for meter readings.
