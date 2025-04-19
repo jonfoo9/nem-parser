@@ -23,7 +23,16 @@ public class NemFileProcessingService {
 
   public List<String> processFile(MultipartFile file) {
     try {
+      if (file.isEmpty()) {
+        throw new IllegalArgumentException("File empty");
+      }
+
+      if (!file.getOriginalFilename().toLowerCase().endsWith(".csv")) {
+        throw new IllegalArgumentException("Only .csv files are allowed.");
+      }
+
       Path nemFilePath = Files.createTempFile("nem12", ".csv");
+
       file.transferTo(nemFilePath.toFile());
       List<String> sqlStatements = nemFileParser.parseNemFileToSql(nemFilePath);
       return sqlStatements;

@@ -71,9 +71,34 @@ class NemFileProcessingServiceTest {
     List<String> mockSqlStatements = Arrays.asList();
     when(nemFileParser.parseNemFileToSql(any(Path.class))).thenReturn(mockSqlStatements);
 
-    List<String> sqlStatements = nemFileProcessingService.processFile(emptyFile);
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class, () -> nemFileProcessingService.processFile(emptyFile));
+    assertEquals("File empty", exception.getMessage());
+  }
 
-    assertNotNull(sqlStatements);
-    assertTrue(sqlStatements.isEmpty());
+  @Test
+  void testProcessFile_invalidExtension() {
+    MockMultipartFile invalidFile =
+        new MockMultipartFile("file", "invalid.txt", "text/plain", "some text".getBytes());
+
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> nemFileProcessingService.processFile(invalidFile));
+
+    assertEquals("Only .csv files are allowed.", exception.getMessage());
+  }
+
+  @Test
+  void testProcessFile_emptyFile_throwsException() {
+    MockMultipartFile emptyFile =
+        new MockMultipartFile("file", "empty.csv", "text/csv", new byte[0]);
+
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class, () -> nemFileProcessingService.processFile(emptyFile));
+
+    assertEquals("File empty", exception.getMessage());
   }
 }

@@ -26,7 +26,7 @@ class NemFileParserApplicationTests {
 
   @Test
   void testUploadNemFile_returnsExpected() throws Exception {
-    ClassPathResource nemFileResource = new ClassPathResource("nem12_file");
+    ClassPathResource nemFileResource = new ClassPathResource("nem12_file.csv");
     ClassPathResource expectedJsonPath = new ClassPathResource("expectedSqlOut.json");
     String expectedJson =
         new String(expectedJsonPath.getInputStream().readAllBytes(), StandardCharsets.UTF_8);

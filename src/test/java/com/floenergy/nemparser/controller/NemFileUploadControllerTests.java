@@ -68,6 +68,23 @@ class NemFileUploadControllerTests {
   }
 
   @Test
+  void testUploadNemFile_inavlidFileError() throws Exception {
+    String content = "invalid";
+    MockMultipartFile file =
+        new MockMultipartFile("file", "test.csv", "text/csv", content.getBytes());
+
+    when(nemFileProcessingService.processFile(any()))
+        .thenThrow(new IllegalArgumentException("Bad file"));
+
+    mockMvc
+        .perform(
+            multipart("/api/process_nem").file(file).contentType(MediaType.MULTIPART_FORM_DATA))
+        .andExpect(status().is4xxClientError())
+        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        .andExpect(content().json("{\"error\":\"Invalid file\",\"message\":\"Bad file\"}"));
+  }
+
+  @Test
   void testUploadNemFile_emptyFile() throws Exception {
     // Prepare an empty mock MultipartFile
     MockMultipartFile emptyFile =

@@ -27,6 +27,9 @@ public class NemFileUploadController {
     try {
       List<String> sqlStatements = nemFileProcessingService.processFile(file);
       return ResponseEntity.ok(sqlStatements);
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+          .body(Map.of("error", "Invalid file", "message", e.getMessage()));
     } catch (CompletionException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(Map.of("error", "Error processing the file", "message", e.getMessage()));
